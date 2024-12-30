@@ -266,7 +266,14 @@ class ContactView(BaseView):
                 # just log, the thread will be created in main category
                 logger.error(f"Category with ID {category_id} not found.")
 
-        await self.manager.create_thread(user, category=category, interaction=view.interaction)
+        try:
+            await self.manager.create_thread(user, category=category, interaction=view.interaction)
+        except:
+            interaction.response.send_message(
+                content="Debes tener los mensajes privados abiertos para contactar al bot de Soporte.",
+                ephemeral=True
+            )
+            return
         self._temp_cached_users.pop(str(user.id), None)
 
     async def force_stop(self) -> None:

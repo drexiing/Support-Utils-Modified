@@ -123,15 +123,7 @@ class ContactManager:
             color=self.bot.main_color,
         )
         embed.set_footer(text=f"{recipient}", icon_url=recipient.display_avatar.url)
-        try:
-            message = await recipient.send(embed=embed)
-        except:
-            del self.bot.threads.cache[recipient.id]
-            interaction.response.send_message(
-                content="Debes tener los mensajes privados abiertos para contactar al bot de Soporte.",
-                ephemeral=True
-            )
-            return
+        message = await recipient.send(embed=embed)
         self.bot.loop.create_task(thread.setup(creator=recipient, category=category, initial_message=message))
         del embed
 
