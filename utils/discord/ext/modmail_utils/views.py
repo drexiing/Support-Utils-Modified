@@ -126,23 +126,25 @@ class ConfirmView(View):
         await interaction.response.send_message("These buttons cannot be controlled by you.", ephemeral=True)
         return False
 
-    @discord.ui.button(label="Yes", style=ButtonStyle.green)
+    @discord.ui.button(label="Yes", style=ButtonStyle.green, custom_id="accept_button")
     async def accept_button(self, interaction: Interaction, button: discord.ui.Button):
         """
         Executed when the user presses the `confirm` button.
         """
         self.interaction = interaction
         self._selected_button = button
+        self._selected_button_id = button.custom_id
         self.value = True
         await self.conclude(interaction)
 
-    @discord.ui.button(label="No", style=ButtonStyle.red)
+    @discord.ui.button(label="No", style=ButtonStyle.red, custom_id="deny_button")
     async def deny_button(self, interaction: Interaction, button: discord.ui.Button):
         """
         Executed when the user presses the `cancel` button.
         """
         self.interaction = interaction
         self._selected_button = button
+        self._selected_button_id = button.custom_id
         self.value = False
         await self.conclude(interaction)
 
@@ -153,9 +155,16 @@ class ConfirmView(View):
         Depends on the `.message` attribute, if it is ephemeral the message will be deleted.
         Otherwise it will be updated with all buttons disabled.
         """
-        if self._selected_button == self.accept_button:
-            await interaction.response.edit_message(content="El bot de Soporte te enviará un mensaje directo (MD) para que puedas contactar al equipo de Soporte. Asegúrate de tener los mensajes directos abiertos para recibirlo correctamente.", embed=None, view=None)
-        elif self._selected_button == self.deny_button:
+        if self._selected_button_id == "accept_button":
+            await interaction.response.edit_message(
+                content=(
+                    "El bot de Soporte te enviará un mensaje directo (MD) para que puedas contactar al equipo de Soporte. "
+                    "Asegúrate de tener los mensajes directos abiertos para recibirlo correctamente."
+                ),
+                embed=None,
+                view=None
+            )
+        elif self._selected_button_id == "deny_button":
             await interaction.response.defer()
             await interaction.delete_original_response()
         self.stop()
