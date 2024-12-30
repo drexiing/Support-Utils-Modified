@@ -5,6 +5,7 @@ from typing import Optional, List, Tuple, Union, TYPE_CHECKING
 import discord
 from discord import ButtonStyle, Interaction
 from discord.utils import MISSING
+from discord.ext import commands
 
 from .converters import convert_emoji as _convert_emoji
 from .ui import View
