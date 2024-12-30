@@ -79,41 +79,41 @@ class ConfirmView(View):
         self.resolve_label_and_emoji()
 
     def resolve_label_and_emoji(self) -> None:
-        accept_label, accept_emoji, accept_style = self._retrieve_label_and_emoji(boolean=True)
-        if _validate_button_output(accept_emoji, accept_label):
-            self.accept_button.label = accept_label
+        _, accept_emoji, accept_style = self._retrieve_label_and_emoji(boolean=True)
+        self.accept_button.label = None  # No label
         self.accept_button.emoji = accept_emoji
         self.accept_button.style = accept_style
 
-        deny_label, deny_emoji, deny_style = self._retrieve_label_and_emoji(boolean=False)
-        if _validate_button_output(deny_emoji, deny_label):
-            self.deny_button.label = deny_label
+        _, deny_emoji, deny_style = self._retrieve_label_and_emoji(boolean=False)
+        self.deny_button.label = None  # No label
         self.deny_button.emoji = deny_emoji
         self.deny_button.style = deny_style
 
     def _retrieve_label_and_emoji(
-        self, *, boolean: Optional[bool] = None
+        self,
+        *,
+        boolean: Optional[bool] = None,
+        default_emoji_accept: Optional[str] = "✅",
+        default_emoji_deny: Optional[str] = "❌",
+        default_style_accept: ButtonStyle = ButtonStyle.green,
+        default_style_deny: ButtonStyle = ButtonStyle.red,
     ) -> Tuple[Optional[str], Optional[Union[discord.PartialEmoji, discord.Emoji, str]], ButtonStyle]:
         if boolean is None:
             raise ValueError("boolean must be set to True or False.")
 
-        cog = self.bot.get_cog("Extended Utils")
-        if cog is None:
-            return
-        attrs = ["label", "emoji", "style"]
-        label, emoji, style = (
-            cog.config.get(f"confirm_button_{'accept' if boolean else 'deny'}_{attr}") for attr in attrs
-        )
+        label = None
+        emoji = default_emoji_accept if boolean else default_emoji_deny
+        style = default_style_accept if boolean else default_style_deny
 
-        if emoji is not None:
-            try:
-                # TODO: Use custom one in utils
-                emoji = _convert_emoji(emoji)
-            except ValueError:
-                emoji = None
-            except EmojiNotFound:
-                # custom emoji not found
-                raise ValueError(f'Emoji "{emoji}" not found.')
+        cog = self.bot.get_cog("Extended Utils")
+        if cog is not None:
+            attrs = ["emoji", "style"]
+            config_emoji, config_style = (
+                cog.config.get(f"confirm_button_{'accept' if boolean else 'deny'}_{attr}") for attr in attrs
+            )
+
+            emoji = config_emoji or emoji
+            style = config_style or style
 
         return label, emoji, style
 
