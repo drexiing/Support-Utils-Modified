@@ -127,10 +127,6 @@ class ContactManager:
             message = await recipient.send(embed=embed)
         except:
             del self.bot.threads.cache[recipient.id]
-            interaction.followup.send(
-                content="Debes tener los mensajes privados abiertos para contactar al bot de Soporte.",
-                ephemeral=True
-            )
             return
         self.bot.loop.create_task(thread.setup(creator=recipient, category=category, initial_message=message))
         del embed
