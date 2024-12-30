@@ -127,7 +127,7 @@ class ContactManager:
             message = await recipient.send(embed=embed)
         except:
             del self.bot.threads.cache[recipient.id]
-            interaction.reply(
+            interaction.response.send_message(
                 content="Debes tener los mensajes privados abiertos para contactar al bot de Soporte.",
                 ephemeral=True
             )
