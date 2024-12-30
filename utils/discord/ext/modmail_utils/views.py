@@ -153,12 +153,11 @@ class ConfirmView(View):
         Depends on the `.message` attribute, if it is ephemeral the message will be deleted.
         Otherwise it will be updated with all buttons disabled.
         """
-        if self.message.flags.ephemeral or self._delete_when_complete:
+        if self._selected_button == self.accept_button:
+            await interaction.response.edit_message(content="El bot de Soporte te enviará un mensaje directo (MD) para que puedas contactar al equipo de Soporte. Asegúrate de tener los mensajes directos abiertos para recibirlo correctamente.", embed=None, view=None)
+        elif self._selected_button == self.deny_button:
             await interaction.response.defer()
             await interaction.delete_original_response()
-        else:
-            self.refresh()
-            await interaction.response.edit_message(view=self)
         self.stop()
 
     def refresh(self) -> None:
