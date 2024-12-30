@@ -111,7 +111,7 @@ class ConfirmView(View):
                 emoji = _convert_emoji(emoji)
             except ValueError:
                 emoji = None
-            except EmojiNotFound:
+            except commands.EmojiNotFound:
                 # custom emoji not found
                 raise ValueError(f'Emoji "{emoji}" not found.')
 
