@@ -132,7 +132,7 @@ class ConfirmView(View):
         """
         self.interaction = interaction
         self._selected_button = button
-        self.value = True
+        self.value = "Test"
         await self.conclude(interaction)
 
     @discord.ui.button(label="rsaras", emoji="<:x_:943338813550374942>", style=ButtonStyle.red)
@@ -142,7 +142,7 @@ class ConfirmView(View):
         """
         self.interaction = interaction
         self._selected_button = button
-        self.value = False
+        self.value = "no"
         await self.conclude(interaction)
 
     async def conclude(self, interaction: Interaction) -> None:
