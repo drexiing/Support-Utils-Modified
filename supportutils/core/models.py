@@ -126,6 +126,14 @@ class ContactManager:
         try:
             message = await recipient.send(embed=embed)
         except:
+            embed = discord.Embed(
+                color=self.bot.error_color,
+                description=(
+                    "No se pudo crear tu ticket. "
+                    "Por favor, verifica que tienes los mensajes directos habilitados para recibirlo correctamente."
+                ),
+            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
             del self.bot.threads.cache[recipient.id]
             return
         self.bot.loop.create_task(thread.setup(creator=recipient, category=category, initial_message=message))
