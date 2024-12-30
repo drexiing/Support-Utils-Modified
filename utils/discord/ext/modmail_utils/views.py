@@ -125,24 +125,24 @@ class ConfirmView(View):
         await interaction.response.send_message("These buttons cannot be controlled by you.", ephemeral=True)
         return False
 
-    @discord.ui.button(label="teast", emoji="<:check:943339707012612156>", style=ButtonStyle.green)
+    @discord.ui.button(emoji="✅", style=ButtonStyle.green)
     async def accept_button(self, interaction: Interaction, button: discord.ui.Button):
         """
-        Executed when the user presses the `confirm` button.
+        Ejecutado cuando el usuario presiona el botón de aceptación.
         """
         self.interaction = interaction
         self._selected_button = button
-        self.value = "Test"
+        self.value = True
         await self.conclude(interaction)
 
-    @discord.ui.button(label="rsaras", emoji="<:x_:943338813550374942>", style=ButtonStyle.red)
+    @discord.ui.button(emoji="❌", style=ButtonStyle.red)
     async def deny_button(self, interaction: Interaction, button: discord.ui.Button):
         """
-        Executed when the user presses the `cancel` button.
+        Ejecutado cuando el usuario presiona el botón de denegación.
         """
         self.interaction = interaction
         self._selected_button = button
-        self.value = "no"
+        self.value = False
         await self.conclude(interaction)
 
     async def conclude(self, interaction: Interaction) -> None:
