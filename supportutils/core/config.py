@@ -23,7 +23,7 @@ _default_config: Dict[str, Any] = {
         "button": {},
         "select": {
             "options": [],
-            "placeholder": "Choose a category",
+            "placeholder": "Categorías de Ticket",
         },
         "override_dmdisabled": False,
         "confirmation": {
