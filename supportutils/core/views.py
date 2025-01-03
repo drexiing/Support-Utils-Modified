@@ -264,6 +264,12 @@ class ContactView(BaseView):
                 if data.get("label") == option.label:
                     category_id = data.get("category")
                     break
+            if option.label == "Contactar al soporte de Discord":
+                mention = self.config.contact["ds_mention"]
+            elif option.label == "Contactar al soporte de Twitch/Kick":
+                mention = self.config.contact["kick_mention"]
+            elif option.label == "Soporte de Carre Coins":  
+                mention = self.config.contact["cc_mention"]
             if category_id is None:
                 raise ValueError(f"Category ID for {option.label} was not set.")
             category = self.bot.get_channel(int(category_id))
@@ -271,7 +277,7 @@ class ContactView(BaseView):
                 # just log, the thread will be created in main category
                 logger.error(f"Category with ID {category_id} not found.")
 
-        await self.manager.create_thread(user, category=category, interaction=view.interaction)
+        await self.manager.create_thread(user, category=category, interaction=view.interaction, mention=mention)
         self._temp_cached_users.pop(str(user.id), None)
 
     async def force_stop(self) -> None:

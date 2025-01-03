@@ -98,6 +98,7 @@ class ContactManager:
         *,
         category: discord.CategoryChannel = None,
         interaction: Optional[discord.Interaction] = None,
+        mention: String = None,
     ) -> Thread:
         """
         Thread creation that was initiated by successful interaction on Contact Menu.
@@ -145,7 +146,7 @@ class ContactManager:
             color=self.bot.main_color,
         )
         await thread.wait_until_ready()
-        await thread.channel.send(embed=embed)
+        await thread.channel.send(content=mention, embed=embed)
 
 
 class Feedback:
