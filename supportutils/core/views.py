@@ -10,7 +10,6 @@ from discord.ext.modmail_utils.ui import Button, Modal as uiModal, TextInput, Vi
 from discord.utils import MISSING
 
 from core.models import getLogger, DMDisabled
-from core.config import SupportUtilityConfig
 
 
 if TYPE_CHECKING:
@@ -134,7 +133,6 @@ class ContactView(BaseView):
 
     def __init__(self, cog: SupportUtility, message: discord.Message = MISSING):
         super().__init__(cog, message=message, timeout=None)
-        self.config: SupportUtilityConfig = SupportUtilityConfig(self, self.db)
 
         self.manager: ContactManager = self.cog.contact_manager
         if self.manager.view is not MISSING:
@@ -267,11 +265,11 @@ class ContactView(BaseView):
                     category_id = data.get("category")
                     break
             if option.label == "Contactar al soporte de Discord":
-                mention = self.config.contact["ds_mention"]
+                mention = self.manager.config["ds_mention"]
             elif option.label == "Contactar al soporte de Twitch/Kick":
-                mention = self.config.contact["kick_mention"]
+                mention = self.manager.config["kick_mention"]
             elif option.label == "Soporte de Carre Coins":  
-                mention = self.config.contact["cc_mention"]
+                mention = self.manager.config["cc_mention"]
             if category_id is None:
                 raise ValueError(f"Category ID for {option.label} was not set.")
             category = self.bot.get_channel(int(category_id))
