@@ -197,7 +197,7 @@ class SupportUtility(commands.Cog, name=__plugin_name__):
         errors = []
         if view.extras["keys"][1] in ("button", "select") and all(
             (view.inputs.get(elem) is None for elem in ("emoji", "label"))
-        ) and view.extras["keys"][1] != "dropdown":
+        ) and "placeholder" not in view.extras["keys"]:
             errors.append("ValueError: Emoji and Label cannot both be None.")
 
         for key, value in view.inputs.items():
