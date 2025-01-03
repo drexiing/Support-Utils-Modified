@@ -207,7 +207,8 @@ class ContactView(BaseView):
         if view.accept_button.disabled:
             view.accept_button.disabled = False
             await interaction.response.edit_message(view=view)
-        await interaction.response.defer()
+        else:
+            await interaction.response.defer()
 
     async def handle_interaction(self, interaction: Interaction, button: Button) -> None:
         """
