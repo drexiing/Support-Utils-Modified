@@ -58,9 +58,6 @@ class DropdownMenu(ui.Select):
             opt.default = opt.value in self.values
         self.view.interaction = interaction
         await self.followup_callback(interaction, self, option=option)
-        
-        self.view.accept_button.disabled = False
-        await interaction.response.edit_message(view=self.view)
 
     def get_option(self, value: str) -> discord.SelectOption:
         for option in self.options:
@@ -207,6 +204,9 @@ class ContactView(BaseView):
     ) -> None:
         view = select.view
         view.inputs["contact_option"] = option
+        if view.accept_button.disabled:
+            view.accept_button.disabled = False
+            await interaction.response.edit_message(view=self.view)
         await interaction.response.defer()
 
     async def handle_interaction(self, interaction: Interaction, button: Button) -> None:
